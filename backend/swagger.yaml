@@ -101,6 +101,76 @@ paths:
           description: Invalid Fields
         '500':
           description: Internal Server Error
+  /accounts/{accountId}/transaction:
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Get all transactions for an account and a given month
+      description: Retrieve all transactions for a specific account and month
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+          description: ID of the account
+
+        - name: month
+          in: query
+          required: true
+          type: string
+          pattern: '^\d{4}-(0[1-9]|1[0-2])$'
+          description: Month's format YYYY-MM
+      responses:
+        '200':
+          description: List of transactions
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
+        '400':
+          description: Invalid parameters
+        '404':
+          description: Account not found
+        '401' :
+          description: Unauthorized
+  /accounts/{accountId}/transaction/{transactionId}:        
+    get:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: View transaction details
+      description: Retrieve detailed information of a transaction from a specific account
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+          description: Account ID
+        - name: transactionId
+          in: path
+          required: true
+          type: string
+          description: Transaction ID
+      responses:
+        '200':
+          description: Transaction details retrieved successfully
+          schema:
+            $ref: '#/definitions/Transaction'
+        '400':
+          description: Invalid accountId or transactionId
+        '401':
+          description: Unauthorized
+        '404':
+          description: Transaction not found
+
+
+
+
+
+          
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -156,3 +226,29 @@ definitions:
     properties:
       userName:
         type: string
+  Transaction:
+    type: object
+    properties:
+      id:
+        type: string
+      accountId:
+        type: string
+      date:
+        type: string
+        format: date
+      description:
+        type: string
+      amount:
+        type: number
+        format: float
+      balance:
+        type: number
+        format: float
+      type:
+        type: string
+        enum: [credit, debit]
+      category:
+        type: string
+      note:
+        type: string
+
