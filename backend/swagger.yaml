@@ -107,21 +107,14 @@ paths:
         - Bearer: []
       tags:
         - Transaction Module
-      summary: Get all transactions for an account and a given month
-      description: Retrieve all transactions for a specific account and month
+      summary: Get all transactions for an account
+      description: Retrieve all transactions for a specific account for the current month
       parameters:
         - name: accountId
           in: path
           required: true
           type: string
           description: ID of the account
-
-        - name: month
-          in: query
-          required: true
-          type: string
-          pattern: '^\d{4}-(0[1-9]|1[0-2])$'
-          description: Month's format YYYY-MM
       responses:
         '200':
           description: List of transactions
@@ -165,12 +158,48 @@ paths:
           description: Unauthorized
         '404':
           description: Transaction not found
+    patch:
+      security:
+        - Bearer: []
+      tags:
+        - Transaction Module
+      summary: Update transaction note or category
+      description: Edit the note and/or category fields of a transaction
+      consumes:
+        - application/json
+      parameters:
+        - name: accountId
+          in: path
+          required: true
+          type: string
+          description: Account ID
+        - name: transactionId
+          in: path
+          required: true
+          type: string
+          description: Transaction ID
+        - in: body
+          name: body
+          required: true
+          schema:
+            type: object
+            properties:
+              category:
+                type: string
+                example: Shopping
+              note:
+                type: string
+                example: "Courses de la semaine"
+      responses:
+        '200':
+          description: Transaction updated successfully
+        '400':
+          description: Invalid request body
+        '401':
+          description: Unauthorized
+        '404':
+          description: Transaction not found
 
-
-
-
-
-          
 securityDefinitions:
   Bearer:
     type: apiKey
