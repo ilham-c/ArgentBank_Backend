@@ -121,7 +121,7 @@ paths:
           schema:
             type: array
             items:
-              $ref: '#/definitions/Transaction'
+              $ref: '#/definitions/TransactionBasic'
         '400':
           description: Invalid parameters
         '404':
@@ -280,4 +280,23 @@ definitions:
         type: string
       note:
         type: string
+  TransactionBasic:
+    type: object
+    properties:
+      id:
+        type: string
+      accountId:
+        type: string
+      date:
+        type: string
+        format: date
+      description:
+        type: string
+      amount:
+        type: number
+        format: float
+      balance:
+        type: number
+        format: float
+
 
